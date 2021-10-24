@@ -1,3 +1,5 @@
+// A simple package for adding colourful comments onto source code lines
+// primarily for the use of user-friendly error messages.
 package decorator
 
 import (
@@ -7,8 +9,11 @@ import (
 	"strings"
 )
 
+// An enumeration defining how to style a line.
 type LineColourEnum string
 
+// The different styles that can be applied to a line.
+// Currently you can only specify one value per line.
 const (
 	Normal    = "\033[0m"
 	Bold      = "\033[1m"
@@ -44,22 +49,34 @@ type lineInfo struct {
 	bottomComments []commentInfo
 }
 
+// Describes how to colour a particular segment of a line.
 type LineColour struct {
-	From   int
-	To     int
+	// The index of the first character to colour.
+	From int
+
+	// The index of the last character (non-inclusive) to colour.
+	To int
+
+	// The colouring to apply.
 	Colour LineColourEnum
 }
 
+// Describes metadata about a line.
 type LineMetadata struct {
-	LineNumber   int
+	// The line number that this line was extracted from.
+	LineNumber int
+
+	// The file that this line belongs to.
 	FileName     string
 	cachedPrefix string
 }
 
+// The main type responsible for this library's functionality.
 type Decorator struct {
 	lines []lineInfo
 }
 
+// Adds a new line to be decorated.
 func (dec *Decorator) AddLine(line string, meta LineMetadata) error {
 	if strings.ContainsAny(line, "\n\t\r") {
 		return errors.New("string contains one of ['\\n', '\\t', '\\r'] which aren't supported")
@@ -69,6 +86,8 @@ func (dec *Decorator) AddLine(line string, meta LineMetadata) error {
 	return nil
 }
 
+// Adds a comment below the specified line, pointing at a specific character in that line.
+// Lines can have multiple bottom comments.
 func (dec *Decorator) AddBottomComment(line int, at int, comment string) error {
 	if strings.ContainsAny(comment, "\n\t\r") {
 		return errors.New("string contains one of ['\\n', '\\t', '\\r'] which aren't supported")
@@ -80,6 +99,8 @@ func (dec *Decorator) AddBottomComment(line int, at int, comment string) error {
 	return nil
 }
 
+// Adds a comment above the specified line, pointing at a specific character in that line.
+// Lines can have multiple top comments.
 func (dec *Decorator) AddTopComment(line int, at int, comment string) error {
 	if strings.ContainsAny(comment, "\n\t\r") {
 		return errors.New("string contains one of ['\\n', '\\t', '\\r'] which aren't supported")
@@ -91,6 +112,7 @@ func (dec *Decorator) AddTopComment(line int, at int, comment string) error {
 	return nil
 }
 
+// Applies colouring to the specified line.
 func (dec *Decorator) ColourLine(line int, colour LineColour) error {
 	if line < 0 || line >= len(dec.lines) {
 		return errors.New("index out of bounds")
@@ -100,6 +122,7 @@ func (dec *Decorator) ColourLine(line int, colour LineColour) error {
 	return nil
 }
 
+// Applies colouring to the specified comment for the specified line.
 func (dec *Decorator) ColourBottomComment(line int, comment int, colour LineColour) error {
 	if line < 0 || line >= len(dec.lines) {
 		return errors.New("line index out of bounds")
@@ -111,6 +134,7 @@ func (dec *Decorator) ColourBottomComment(line int, comment int, colour LineColo
 	return nil
 }
 
+// Applies colouring to the specified comment for the specified line.
 func (dec *Decorator) ColourTopComment(line int, comment int, colour LineColour) error {
 	if line < 0 || line >= len(dec.lines) {
 		return errors.New("line index out of bounds")
@@ -122,6 +146,7 @@ func (dec *Decorator) ColourTopComment(line int, comment int, colour LineColour)
 	return nil
 }
 
+// Constructs a string consisting of all the lines; their metadata, and their comments.
 func (dec *Decorator) String() string {
 	var b strings.Builder
 
