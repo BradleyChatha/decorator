@@ -1,5 +1,9 @@
 # Overview
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/BradleyChatha/decorator.svg)](https://pkg.go.dev/github.com/BradleyChatha/decorator)
+[![Go Report Card](https://goreportcard.com/badge/github.com/BradleyChatha/decorator)](https://goreportcard.com/report/github.com/BradleyChatha/decorator)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/88d207c6fb6a4869960a5cbb29ecaaa7)](https://www.codacy.com/gh/BradleyChatha/decorator/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=BradleyChatha/decorator&amp;utm_campaign=Badge_Grade)
+
 Decorator is a simple library for adding comments onto lines of text, primarily aimed at user-friendly error messages.
 
 For example:
